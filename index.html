@@ -401,12 +401,20 @@ function renderMemberChips(){
   const doAdd = async ()=>{
     const v = input.value.trim();
     if(!v) return;
-    state = load();
-    if(state.members.includes(v)){ input.value=''; return; }
-    state = await refreshState();
+    let fresh;
+    try{
+      fresh = await refreshState();
+    }catch(err){
+      return; // refreshState already alerted the specific error
+    }
+    state = fresh;
     if(state.members.includes(v)){ input.value=''; renderAll(); return; }
     state.members.push(v); input.value='';
-    await persistState('Add friend: '+v);
+    try{
+      await persistState('Add friend: '+v);
+    }catch(err){
+      // persistState already alerts/reports failure internally
+    }
     renderAll();
   };
   document.getElementById('newMemberBtn').onclick = doAdd;

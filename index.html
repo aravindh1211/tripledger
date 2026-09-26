@@ -247,6 +247,10 @@ main{padding:16px 20px 100px; max-width:640px; margin:0 auto;}
 
 <script>
 const STORE_KEY = 'tripledger_v1';
+const GH_CONFIG_KEY = 'tripledger_gh_config';
+let ghConfig = null;
+try{ ghConfig = JSON.parse(localStorage.getItem(GH_CONFIG_KEY) || 'null'); }catch(e){}
+let ghSha = null;
 let state = load();
 
 function load(){
@@ -260,6 +264,95 @@ function save(){
   try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
 }
 function uid(){ return Math.random().toString(36).slice(2,9); }
+
+// ---------- GitHub-as-database ----------
+function b64EncodeUnicode(str){ return btoa(unescape(encodeURIComponent(str))); }
+function b64DecodeUnicode(str){ return decodeURIComponent(escape(atob(str.replace(/\n/g,'')))); }
+function ghApiUrl(){ return `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${ghConfig.path}`; }
+
+async function ghGet(){
+  const res = await fetch(ghApiUrl(), {
+    headers:{ 'Authorization':'token '+ghConfig.token, 'Accept':'application/vnd.github+json' }
+  });
+  if(res.status===404){ return { state:{tripName:'Trip Ledger', members:[], expenses:[]}, sha:null }; }
+  if(!res.ok){ throw new Error('GitHub responded '+res.status+' — check your token and repo details.'); }
+  const json = await res.json();
+  const content = json.content ? JSON.parse(b64DecodeUnicode(json.content)) : {tripName:'Trip Ledger', members:[], expenses:[]};
+  return { state: content, sha: json.sha };
+}
+async function ghPut(message){
+  const body = { message: message || 'Update TripLedger data', content: b64EncodeUnicode(JSON.stringify(state, null, 2)) };
+  if(ghSha) body.sha = ghSha;
+  const res = await fetch(ghApiUrl(), {
+    method:'PUT',
+    headers:{ 'Authorization':'token '+ghConfig.token, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' },
+    body: JSON.stringify(body)
+  });
+  if(!res.ok){
+    if(res.status===409 || res.status===422){
+      const fresh = await ghGet();
+      ghSha = fresh.sha;
+      const retryBody = { message: message || 'Update TripLedger data', content: b64EncodeUnicode(JSON.stringify(state, null, 2)), sha: ghSha };
+      const retryRes = await fetch(ghApiUrl(), {
+        method:'PUT',
+        headers:{ 'Authorization':'token '+ghConfig.token, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' },
+        body: JSON.stringify(retryBody)
+      });
+      if(!retryRes.ok) throw new Error('GitHub save conflict could not be resolved (status '+retryRes.status+').');
+      const retryJson = await retryRes.json();
+      ghSha = retryJson.content.sha;
+      return;
+    }
+    throw new Error('GitHub save failed — status '+res.status+'. Check your token has write access to this repo.');
+  }
+  const json = await res.json();
+  ghSha = json.content.sha;
+}
+
+function isCloudConfigured(){ return !!(ghConfig && ghConfig.token && ghConfig.owner && ghConfig.repo && ghConfig.path); }
+
+function setSyncStatus(text, isError){
+  const el = document.getElementById('syncStatus');
+  if(!el) return;
+  el.textContent = text;
+  el.style.color = isError ? 'var(--neg)' : 'var(--ink-soft)';
+  if(!isError && text) setTimeout(()=>{ if(el.textContent===text) el.textContent=''; }, 2500);
+}
+
+// Always call this before mutating state, so every edit is based on the
+// latest saved truth (GitHub if configured, else local storage) rather
+// than a possibly stale in-memory copy.
+async function refreshState(){
+  if(isCloudConfigured()){
+    setSyncStatus('Syncing…');
+    try{
+      const r = await ghGet();
+      ghSha = r.sha;
+      setSyncStatus('');
+      return r.state;
+    }catch(err){
+      setSyncStatus('Could not reach GitHub — change not saved.', true);
+      alert('Could not reach GitHub: '+err.message+'\n\nYour change was NOT saved. Check your connection and token, then try again.');
+      throw err;
+    }
+  }
+  return load();
+}
+// Always call this after mutating state, to persist (GitHub if configured,
+// local storage mirror always kept as an offline fallback).
+async function persistState(message){
+  save();
+  if(isCloudConfigured()){
+    setSyncStatus('Saving…');
+    try{
+      await ghPut(message);
+      setSyncStatus('Saved to GitHub ✓');
+    }catch(err){
+      setSyncStatus('Save failed — kept locally only.', true);
+      alert('Could not save to GitHub: '+err.message+'\n\nYour change is kept on this device only for now.');
+    }
+  }
+}
 function fmt(n){
   const s = (Math.round(n*100)/100).toFixed(2);
   return (n<0?'-':'') + '₹' + Math.abs(s).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -284,8 +377,8 @@ function renderMemberChips(){
     chip.innerHTML = `<span>${escapeHtml(m)}</span>`;
     const btn = document.createElement('button');
     btn.textContent='×';
-    btn.onclick = ()=>{
-      state = load();
+    btn.onclick = async ()=>{
+      try{ state = await refreshState(); }catch(e){ renderAll(); return; }
       const usedIn = state.expenses.filter(e=> e.paidBy.some(p=>p.name===m) || e.splits.some(s=>s.name===m));
       if(usedIn.length>0){
         alert(m+' is part of '+usedIn.length+(usedIn.length===1?' expense':' expenses')+' ("'+usedIn.slice(0,3).map(e=>e.description).join('", "')+(usedIn.length>3?'", ...':'"')+'). Remove or edit '+(usedIn.length===1?'that expense':'those expenses')+' first (tap it in the Log tab) before removing '+m+'.');
@@ -294,7 +387,8 @@ function renderMemberChips(){
       }
       if(!confirm('Remove '+m+' from this trip?')){ renderAll(); return; }
       state.members = state.members.filter(x=>x!==m);
-      save(); renderAll();
+      await persistState('Remove friend: '+m);
+      renderAll();
     };
     chip.appendChild(btn);
     wrap.appendChild(chip);
@@ -304,28 +398,95 @@ function renderMemberChips(){
   addWrap.innerHTML = `<input type="text" placeholder="Add friend" id="newMemberInput"><button id="newMemberBtn">+</button>`;
   wrap.appendChild(addWrap);
   const input = document.getElementById('newMemberInput');
-  const doAdd = ()=>{
+  const doAdd = async ()=>{
     const v = input.value.trim();
     if(!v) return;
     state = load();
     if(state.members.includes(v)){ input.value=''; return; }
+    state = await refreshState();
+    if(state.members.includes(v)){ input.value=''; renderAll(); return; }
     state.members.push(v); input.value='';
-    save(); renderAll();
+    await persistState('Add friend: '+v);
+    renderAll();
   };
   document.getElementById('newMemberBtn').onclick = doAdd;
   input.addEventListener('keydown', e=>{ if(e.key==='Enter') doAdd(); });
-  document.getElementById('tripSub').innerHTML = state.expenses.length + (state.expenses.length===1?' expense logged':' expenses logged') + ' <button id="resetTripBtn" style="border:none;background:none;color:var(--neg);font-size:.74rem;text-decoration:underline;cursor:pointer;padding:0;margin-left:6px;">Reset trip</button>';
-  document.getElementById('resetTripBtn').onclick = ()=>{
-    if(confirm('This permanently deletes every friend and expense on this device. This cannot be undone. Continue?')){
+  document.getElementById('tripSub').innerHTML = state.expenses.length + (state.expenses.length===1?' expense logged':' expenses logged')
+    + ' <button id="resetTripBtn" style="border:none;background:none;color:var(--neg);font-size:.74rem;text-decoration:underline;cursor:pointer;padding:0;margin-left:6px;">Reset trip</button>'
+    + ' <button id="cloudSettingsBtn" style="border:none;background:none;color:var(--teal-light);font-size:.74rem;text-decoration:underline;cursor:pointer;padding:0;margin-left:10px;">'+(isCloudConfigured()?'GitHub sync ✓':'Set up GitHub sync')+'</button>'
+    + ' <span id="syncStatus" style="font-size:.72rem;margin-left:8px;"></span>';
+  document.getElementById('resetTripBtn').onclick = async ()=>{
+    if(confirm('This permanently deletes every friend and expense'+(isCloudConfigured()?' in your GitHub repo':' on this device')+'. This cannot be undone. Continue?')){
       state = { tripName:'Trip Ledger', members:[], expenses:[] };
+      ghSha = isCloudConfigured() ? ghSha : null;
       try{ localStorage.removeItem(STORE_KEY); }catch(e){}
-      save();
+      await persistState('Reset trip');
       tripNameEl.textContent = state.tripName;
       renderAll();
     }
   };
+  document.getElementById('cloudSettingsBtn').onclick = openCloudSettingsModal;
 }
 function escapeHtml(s){ return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// ---------- GitHub sync settings modal ----------
+function openCloudSettingsModal(){
+  const modalRoot = document.getElementById('modalRoot');
+  const overlay = document.createElement('div');
+  overlay.className='overlay';
+  overlay.innerHTML = `
+  <div class="sheet">
+    <h2 class="serif">GitHub sync</h2>
+    <p style="font-size:.82rem;color:var(--ink-soft);margin-top:-8px;">Data is stored as a JSON file in your GitHub repo instead of just this device. Use a fine-grained token scoped to only this one repo with "Contents: Read and write" permission.</p>
+    <div class="field"><label>Repo owner</label><input type="text" id="gh_owner" placeholder="e.g. aravindh1211"></div>
+    <div class="field"><label>Repo name</label><input type="text" id="gh_repo" placeholder="e.g. tripledger"></div>
+    <div class="field"><label>Data file path</label><input type="text" id="gh_path" placeholder="data.json"></div>
+    <div class="field"><label>Personal access token</label><input type="password" id="gh_token" placeholder="github_pat_..."></div>
+    <div class="sheet-actions">
+      <button class="btn ghost" id="ghCancelBtn">Cancel</button>
+      ${isCloudConfigured()?'<button class="btn danger" id="ghDisconnectBtn">Disconnect</button>':''}
+      <button class="btn primary" id="ghSaveBtn">Connect</button>
+    </div>
+  </div>`;
+  modalRoot.appendChild(overlay);
+  document.getElementById('gh_owner').value = ghConfig?.owner || 'aravindh1211';
+  document.getElementById('gh_repo').value = ghConfig?.repo || 'tripledger';
+  document.getElementById('gh_path').value = ghConfig?.path || 'data.json';
+  document.getElementById('gh_token').value = ghConfig?.token || '';
+  document.getElementById('ghCancelBtn').onclick = ()=> overlay.remove();
+  overlay.onclick = (e)=>{ if(e.target===overlay) overlay.remove(); };
+  if(isCloudConfigured()){
+    document.getElementById('ghDisconnectBtn').onclick = ()=>{
+      if(confirm('Stop syncing with GitHub? Your data stays in the repo, but this device will go back to local-only storage.')){
+        ghConfig = null; ghSha = null;
+        localStorage.removeItem(GH_CONFIG_KEY);
+        overlay.remove(); renderAll();
+      }
+    };
+  }
+  document.getElementById('ghSaveBtn').onclick = async ()=>{
+    const owner = document.getElementById('gh_owner').value.trim();
+    const repo = document.getElementById('gh_repo').value.trim();
+    const path = document.getElementById('gh_path').value.trim() || 'data.json';
+    const token = document.getElementById('gh_token').value.trim();
+    if(!owner || !repo || !token){ alert('Fill in owner, repo, and token.'); return; }
+    ghConfig = { owner, repo, path, token };
+    try{
+      setSyncStatus('Connecting…');
+      const r = await ghGet();
+      ghSha = r.sha;
+      state = r.state;
+      localStorage.setItem(GH_CONFIG_KEY, JSON.stringify(ghConfig));
+      if(!r.sha){ await ghPut('Initialize TripLedger data'); }
+      setSyncStatus('');
+      overlay.remove();
+      renderAll();
+    }catch(err){
+      alert('Could not connect: '+err.message+'\n\nCheck the owner/repo names and that your token has Contents: Read and write access to this repo.');
+      setSyncStatus('');
+    }
+  };
+}
 
 // ---------- tabs ----------
 document.querySelectorAll('.tab-btn').forEach(btn=>{
@@ -742,16 +903,17 @@ function openExpenseModal(id){
   overlay.onclick = (e)=>{ if(e.target===overlay) overlay.remove(); };
 
   if(existing){
-    document.getElementById('deleteBtn').onclick = ()=>{
+    document.getElementById('deleteBtn').onclick = async ()=>{
       if(confirm('Delete this expense?')){
-        state = load();
+        try{ state = await refreshState(); }catch(e){ return; }
         state.expenses = state.expenses.filter(e=>e.id!==editingId);
-        save(); renderAll(); overlay.remove();
+        await persistState('Delete expense: '+existing.description);
+        renderAll(); overlay.remove();
       }
     };
   }
 
-  document.getElementById('saveBtn').onclick = ()=>{
+  document.getElementById('saveBtn').onclick = async ()=>{
     const description = document.getElementById('f_desc').value.trim();
     const amount = parseFloat(document.getElementById('f_amt').value);
     const category = document.getElementById('f_cat').value.trim() || 'General';
@@ -790,7 +952,7 @@ function openExpenseModal(id){
       }
     }
 
-    state = load();
+    try{ state = await refreshState(); }catch(e){ return; }
     if(editingId){
       const target = state.expenses.find(e=>e.id===editingId);
       if(target){
@@ -801,13 +963,23 @@ function openExpenseModal(id){
     } else {
       state.expenses.push({ id:uid(), ts:Date.now(), description, amount, category, paidBy, splits, splitMode });
     }
-    save(); renderAll(); overlay.remove();
+    await persistState((editingId?'Update':'Add')+' expense: '+description);
+    renderAll(); overlay.remove();
   };
 }
 
 document.getElementById('addExpenseBtn').onclick = ()=> openExpenseModal(null);
 
-renderAll();
+(async ()=>{
+  if(isCloudConfigured()){
+    try{
+      state = await refreshState();
+    }catch(e){
+      state = load(); // fall back to local mirror if GitHub is unreachable at boot
+    }
+  }
+  renderAll();
+})();
 
 if('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')){
   window.addEventListener('load', ()=>{

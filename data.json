@@ -7,5 +7,46 @@
     "Sathish",
     "Yuvaraj"
   ],
-  "expenses": []
+  "expenses": [
+    {
+      "id": "xltk0mn",
+      "ts": 1790433831440,
+      "description": "Train up/down",
+      "amount": 3700,
+      "category": "Travel",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 1000
+        },
+        {
+          "name": "Rahul",
+          "amount": 2700
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 740
+        },
+        {
+          "name": "Rahul",
+          "amount": 740
+        },
+        {
+          "name": "Sarvajith",
+          "amount": 740
+        },
+        {
+          "name": "Sathish",
+          "amount": 740
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 740
+        }
+      ],
+      "splitMode": "equal"
+    }
+  ]
 }

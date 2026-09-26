@@ -52,6 +52,30 @@
         }
       ],
       "splitMode": "custom"
+    },
+    {
+      "id": "v8y8jwo",
+      "ts": 1790428499330,
+      "description": "Kayaking",
+      "amount": 1200,
+      "category": "Adventure",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 1200
+        }
+      ],
+      "splits": [
+        {
+          "name": "Ragul",
+          "amount": 600
+        },
+        {
+          "name": "Aravindh",
+          "amount": 600
+        }
+      ],
+      "splitMode": "equal"
     }
   ]
 }

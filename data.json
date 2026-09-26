@@ -28,6 +28,30 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "x2tg3p7",
+      "ts": 1790428464383,
+      "description": "Dinner at cliff",
+      "amount": 1500,
+      "category": "Food",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 1500
+        }
+      ],
+      "splits": [
+        {
+          "name": "Ragul",
+          "amount": 800
+        },
+        {
+          "name": "Aravindh",
+          "amount": 700
+        }
+      ],
+      "splitMode": "custom"
     }
   ]
 }

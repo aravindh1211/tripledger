@@ -1,5 +1,7 @@
 {
   "tripName": "Trip Ledger",
-  "members": [],
+  "members": [
+    "Bgf"
+  ],
   "expenses": []
 }

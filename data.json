@@ -4,30 +4,5 @@
     "Aravindh",
     "Rahul"
   ],
-  "expenses": [
-    {
-      "id": "1mixqad",
-      "ts": 1790428144239,
-      "description": "Train up/down",
-      "amount": 3700,
-      "category": "Travel",
-      "paidBy": [
-        {
-          "name": "Rahul",
-          "amount": 3700
-        }
-      ],
-      "splits": [
-        {
-          "name": "Aravindh",
-          "amount": 1850
-        },
-        {
-          "name": "Rahul",
-          "amount": 1850
-        }
-      ],
-      "splitMode": "equal"
-    }
-  ]
+  "expenses": []
 }

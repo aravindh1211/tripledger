@@ -4,5 +4,30 @@
     "Ragul",
     "Aravindh"
   ],
-  "expenses": []
+  "expenses": [
+    {
+      "id": "fs2vwmr",
+      "ts": 1790428410069,
+      "description": "Train",
+      "amount": 3700,
+      "category": "Travel",
+      "paidBy": [
+        {
+          "name": "Ragul",
+          "amount": 3700
+        }
+      ],
+      "splits": [
+        {
+          "name": "Ragul",
+          "amount": 1850
+        },
+        {
+          "name": "Aravindh",
+          "amount": 1850
+        }
+      ],
+      "splitMode": "equal"
+    }
+  ]
 }

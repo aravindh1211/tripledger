@@ -285,12 +285,14 @@ function renderMemberChips(){
     const btn = document.createElement('button');
     btn.textContent='×';
     btn.onclick = ()=>{
+      state = load();
       const usedIn = state.expenses.filter(e=> e.paidBy.some(p=>p.name===m) || e.splits.some(s=>s.name===m));
       if(usedIn.length>0){
         alert(m+' is part of '+usedIn.length+(usedIn.length===1?' expense':' expenses')+' ("'+usedIn.slice(0,3).map(e=>e.description).join('", "')+(usedIn.length>3?'", ...':'"')+'). Remove or edit '+(usedIn.length===1?'that expense':'those expenses')+' first (tap it in the Log tab) before removing '+m+'.');
+        renderAll();
         return;
       }
-      if(!confirm('Remove '+m+' from this trip?')) return;
+      if(!confirm('Remove '+m+' from this trip?')){ renderAll(); return; }
       state.members = state.members.filter(x=>x!==m);
       save(); renderAll();
     };
@@ -305,6 +307,7 @@ function renderMemberChips(){
   const doAdd = ()=>{
     const v = input.value.trim();
     if(!v) return;
+    state = load();
     if(state.members.includes(v)){ input.value=''; return; }
     state.members.push(v); input.value='';
     save(); renderAll();
@@ -741,7 +744,8 @@ function openExpenseModal(id){
   if(existing){
     document.getElementById('deleteBtn').onclick = ()=>{
       if(confirm('Delete this expense?')){
-        state.expenses = state.expenses.filter(e=>e.id!==existing.id);
+        state = load();
+        state.expenses = state.expenses.filter(e=>e.id!==editingId);
         save(); renderAll(); overlay.remove();
       }
     };
@@ -786,8 +790,14 @@ function openExpenseModal(id){
       }
     }
 
-    if(existing){
-      Object.assign(existing, { description, amount, category, paidBy, splits, splitMode });
+    state = load();
+    if(editingId){
+      const target = state.expenses.find(e=>e.id===editingId);
+      if(target){
+        Object.assign(target, { description, amount, category, paidBy, splits, splitMode });
+      } else {
+        state.expenses.push({ id:editingId, ts:Date.now(), description, amount, category, paidBy, splits, splitMode });
+      }
     } else {
       state.expenses.push({ id:uid(), ts:Date.now(), description, amount, category, paidBy, splits, splitMode });
     }

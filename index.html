@@ -225,7 +225,7 @@ main{padding:16px 20px 100px; max-width:640px; margin:0 auto;}
   <div class="trip-row">
     <h1 class="trip-name serif" id="tripName" contenteditable="true" spellcheck="false">Trip Ledger</h1>
   </div>
-  <div class="trip-sub" id="tripSub">0 expenses logged</div>
+  <div class="trip-sub" id="tripSub">0 expenses logged <button id="resetTripBtn" style="border:none;background:none;color:var(--neg);font-size:.74rem;text-decoration:underline;cursor:pointer;padding:0;margin-left:6px;">Reset trip</button></div>
   <div class="members" id="memberChips"></div>
 </header>
 
@@ -285,9 +285,12 @@ function renderMemberChips(){
     const btn = document.createElement('button');
     btn.textContent='×';
     btn.onclick = ()=>{
-      if(state.expenses.some(e=> e.paidBy.some(p=>p.name===m) || e.splits.some(s=>s.name===m))){
-        if(!confirm(m+' appears in logged expenses. Remove anyway? Their name stays on past expenses.')) return;
+      const usedIn = state.expenses.filter(e=> e.paidBy.some(p=>p.name===m) || e.splits.some(s=>s.name===m));
+      if(usedIn.length>0){
+        alert(m+' is part of '+usedIn.length+(usedIn.length===1?' expense':' expenses')+' ("'+usedIn.slice(0,3).map(e=>e.description).join('", "')+(usedIn.length>3?'", ...':'"')+'). Remove or edit '+(usedIn.length===1?'that expense':'those expenses')+' first (tap it in the Log tab) before removing '+m+'.');
+        return;
       }
+      if(!confirm('Remove '+m+' from this trip?')) return;
       state.members = state.members.filter(x=>x!==m);
       save(); renderAll();
     };
@@ -308,7 +311,16 @@ function renderMemberChips(){
   };
   document.getElementById('newMemberBtn').onclick = doAdd;
   input.addEventListener('keydown', e=>{ if(e.key==='Enter') doAdd(); });
-  document.getElementById('tripSub').textContent = state.expenses.length + (state.expenses.length===1?' expense logged':' expenses logged');
+  document.getElementById('tripSub').innerHTML = state.expenses.length + (state.expenses.length===1?' expense logged':' expenses logged') + ' <button id="resetTripBtn" style="border:none;background:none;color:var(--neg);font-size:.74rem;text-decoration:underline;cursor:pointer;padding:0;margin-left:6px;">Reset trip</button>';
+  document.getElementById('resetTripBtn').onclick = ()=>{
+    if(confirm('This permanently deletes every friend and expense on this device. This cannot be undone. Continue?')){
+      state = { tripName:'Trip Ledger', members:[], expenses:[] };
+      try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+      save();
+      tripNameEl.textContent = state.tripName;
+      renderAll();
+    }
+  };
 }
 function escapeHtml(s){ return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 

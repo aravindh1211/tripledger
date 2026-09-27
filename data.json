@@ -51,58 +51,6 @@
         }
       ],
       "splitMode": "equal"
-    },
-    {
-      "id": "w27v59g",
-      "ts": 1790517897788,
-      "description": "Hotel",
-      "amount": 8500,
-      "category": "Stay",
-      "paidBy": [
-        {
-          "name": "Aravindh",
-          "amount": 2900
-        },
-        {
-          "name": "Rahul",
-          "amount": 1400
-        },
-        {
-          "name": "Sarvajith",
-          "amount": 1400
-        },
-        {
-          "name": "Sathish",
-          "amount": 1400
-        },
-        {
-          "name": "Yuvaraj",
-          "amount": 1400
-        }
-      ],
-      "splits": [
-        {
-          "name": "Aravindh",
-          "amount": 1700
-        },
-        {
-          "name": "Rahul",
-          "amount": 1700
-        },
-        {
-          "name": "Sarvajith",
-          "amount": 1700
-        },
-        {
-          "name": "Sathish",
-          "amount": 1700
-        },
-        {
-          "name": "Yuvaraj",
-          "amount": 1700
-        }
-      ],
-      "splitMode": "equal"
     }
   ]
 }

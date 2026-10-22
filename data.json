@@ -7,58 +7,5 @@
     "Sathish",
     "Yuvaraj"
   ],
-  "expenses": [
-    {
-      "id": "mprjq7r",
-      "ts": 1790947076000,
-      "description": "Hostel",
-      "amount": 8464,
-      "category": "Stay",
-      "paidBy": [
-        {
-          "name": "Aravindh",
-          "amount": 2851.2
-        },
-        {
-          "name": "Rahul",
-          "amount": 1960
-        },
-        {
-          "name": "Sarvajith",
-          "amount": 0
-        },
-        {
-          "name": "Sathish",
-          "amount": 1692.8
-        },
-        {
-          "name": "Yuvaraj",
-          "amount": 1960
-        }
-      ],
-      "splits": [
-        {
-          "name": "Aravindh",
-          "amount": 1692.8
-        },
-        {
-          "name": "Rahul",
-          "amount": 1692.8
-        },
-        {
-          "name": "Sarvajith",
-          "amount": 1692.8
-        },
-        {
-          "name": "Sathish",
-          "amount": 1692.8
-        },
-        {
-          "name": "Yuvaraj",
-          "amount": 1692.8
-        }
-      ],
-      "splitMode": "equal"
-    }
-  ]
+  "expenses": []
 }

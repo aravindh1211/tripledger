@@ -46,6 +46,46 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "n8b8w28",
+      "ts": 1792648931549,
+      "description": "Ostello Hostel",
+      "amount": 7371,
+      "category": "Stay",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 3451
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 1960
+        },
+        {
+          "name": "Ragul",
+          "amount": 1960
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 1842.75
+        },
+        {
+          "name": "Sarvajith",
+          "amount": 1842.75
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 1842.75
+        },
+        {
+          "name": "Ragul",
+          "amount": 1842.75
+        }
+      ],
+      "splitMode": "equal"
     }
   ]
 }

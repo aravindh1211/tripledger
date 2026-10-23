@@ -122,6 +122,26 @@
         }
       ],
       "splitMode": "custom"
+    },
+    {
+      "id": "j0nggbd",
+      "ts": 1792781480508,
+      "description": "Sprite and Juice",
+      "amount": 85,
+      "category": "General",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 85
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 85
+        }
+      ],
+      "splitMode": "equal"
     }
   ]
 }

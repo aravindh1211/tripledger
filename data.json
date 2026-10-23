@@ -142,6 +142,34 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "w31vse1",
+      "ts": 1792781616410,
+      "description": "Tea",
+      "amount": 45,
+      "category": "Snacks and Drinks",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 45
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 15
+        },
+        {
+          "name": "Sarvajith",
+          "amount": 15
+        },
+        {
+          "name": "Ragul",
+          "amount": 15
+        }
+      ],
+      "splitMode": "equal"
     }
   ]
 }

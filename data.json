@@ -298,6 +298,38 @@
         }
       ],
       "splitMode": "custom"
+    },
+    {
+      "id": "rcnhzsp",
+      "ts": 1792782043428,
+      "description": "Tea and Juice",
+      "amount": 90,
+      "category": "Snacks and Drinks",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 90
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 22.5
+        },
+        {
+          "name": "Sarvajith",
+          "amount": 22.5
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 22.5
+        },
+        {
+          "name": "Ragul",
+          "amount": 22.5
+        }
+      ],
+      "splitMode": "equal"
     }
   ]
 }

@@ -176,7 +176,7 @@
       "ts": 1792781712652,
       "description": "Bike rentals",
       "amount": 2400,
-      "category": "General",
+      "category": "Rent",
       "paidBy": [
         {
           "name": "Aravindh",

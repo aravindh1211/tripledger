@@ -266,6 +266,38 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "1o8qnc6",
+      "ts": 1792781965032,
+      "description": "Lunch 23 Oct",
+      "amount": 550,
+      "category": "Food",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 550
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 150
+        },
+        {
+          "name": "Sarvajith",
+          "amount": 100
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 150
+        },
+        {
+          "name": "Ragul",
+          "amount": 150
+        }
+      ],
+      "splitMode": "custom"
     }
   ]
 }

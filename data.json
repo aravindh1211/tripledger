@@ -330,6 +330,38 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "s3cub2f",
+      "ts": 1792782118459,
+      "description": "Dinner",
+      "amount": 370,
+      "category": "Food",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 370
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 92.5
+        },
+        {
+          "name": "Sarvajith",
+          "amount": 92.5
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 92.5
+        },
+        {
+          "name": "Ragul",
+          "amount": 92.5
+        }
+      ],
+      "splitMode": "equal"
     }
   ]
 }

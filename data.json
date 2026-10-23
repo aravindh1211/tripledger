@@ -86,6 +86,42 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "h89c1j0",
+      "ts": 1792734451184,
+      "description": "Dinner on 22 Oxt",
+      "amount": 632,
+      "category": "Food",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 532
+        },
+        {
+          "name": "Sarvajith",
+          "amount": 100
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 178
+        },
+        {
+          "name": "Sarvajith",
+          "amount": 100
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 177
+        },
+        {
+          "name": "Ragul",
+          "amount": 177
+        }
+      ],
+      "splitMode": "custom"
     }
   ]
 }

@@ -234,6 +234,38 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "jzcsnky",
+      "ts": 1792781847822,
+      "description": "Kayaking",
+      "amount": 2000,
+      "category": "Activity",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 2000
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 500
+        },
+        {
+          "name": "Sarvajith",
+          "amount": 500
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 500
+        },
+        {
+          "name": "Ragul",
+          "amount": 500
+        }
+      ],
+      "splitMode": "equal"
     }
   ]
 }

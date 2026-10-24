@@ -354,6 +354,38 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "v01aihw",
+      "ts": 1792811437775,
+      "description": "Bike deposit",
+      "amount": 2000,
+      "category": "Rent",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 2000
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 500
+        },
+        {
+          "name": "Sarvajith",
+          "amount": 500
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 500
+        },
+        {
+          "name": "Ragul",
+          "amount": 500
+        }
+      ],
+      "splitMode": "equal"
     }
   ]
 }

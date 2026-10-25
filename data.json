@@ -638,6 +638,34 @@
         }
       ],
       "splitMode": "custom"
+    },
+    {
+      "id": "otl2vub",
+      "ts": 1792918012794,
+      "description": "Tea and Biscuits",
+      "amount": 80,
+      "category": "Snacks and Drinks",
+      "paidBy": [
+        {
+          "name": "Ragul",
+          "amount": 80
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 30
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 20
+        },
+        {
+          "name": "Ragul",
+          "amount": 30
+        }
+      ],
+      "splitMode": "custom"
     }
   ]
 }

@@ -390,19 +390,15 @@
       "splits": [
         {
           "name": "Aravindh",
-          "amount": 130
+          "amount": 173.33
         },
         {
           "name": "Sarvajith",
-          "amount": 130
+          "amount": 173.33
         },
         {
           "name": "Yuvaraj",
-          "amount": 130
-        },
-        {
-          "name": "Ragul",
-          "amount": 130
+          "amount": 173.34
         }
       ],
       "splitMode": "equal"

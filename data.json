@@ -406,6 +406,34 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "npnlhxe",
+      "ts": 1792905715481,
+      "description": "Jatayu",
+      "amount": 1100,
+      "category": "Activity",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 1100
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 366.67
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 366.67
+        },
+        {
+          "name": "Ragul",
+          "amount": 366.66
+        }
+      ],
+      "splitMode": "equal"
     }
   ]
 }

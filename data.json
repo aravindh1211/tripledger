@@ -490,6 +490,38 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "03tvrqj",
+      "ts": 1792917687429,
+      "description": "Petrol",
+      "amount": 610,
+      "category": "Fuel",
+      "paidBy": [
+        {
+          "name": "Ragul",
+          "amount": 610
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 152.5
+        },
+        {
+          "name": "Sarvajith",
+          "amount": 152.5
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 152.5
+        },
+        {
+          "name": "Ragul",
+          "amount": 152.5
+        }
+      ],
+      "splitMode": "equal"
     }
   ]
 }

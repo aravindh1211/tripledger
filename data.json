@@ -374,6 +374,38 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "8n8ny3s",
+      "ts": 1792905661911,
+      "description": "Breakfast 24 Oct",
+      "amount": 520,
+      "category": "Food",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 520
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 130
+        },
+        {
+          "name": "Sarvajith",
+          "amount": 130
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 130
+        },
+        {
+          "name": "Ragul",
+          "amount": 130
+        }
+      ],
+      "splitMode": "equal"
     }
   ]
 }

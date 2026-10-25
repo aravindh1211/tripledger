@@ -522,6 +522,34 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "pqxw843",
+      "ts": 1792917747167,
+      "description": "Tea",
+      "amount": 170,
+      "category": "General",
+      "paidBy": [
+        {
+          "name": "Ragul",
+          "amount": 170
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 56.67
+        },
+        {
+          "name": "Sarvajith",
+          "amount": 56.67
+        },
+        {
+          "name": "Ragul",
+          "amount": 56.66
+        }
+      ],
+      "splitMode": "equal"
     }
   ]
 }

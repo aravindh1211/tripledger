@@ -550,6 +550,38 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "jey1ocf",
+      "ts": 1792917794083,
+      "description": "Ice cream",
+      "amount": 160,
+      "category": "Snacks and Drinks",
+      "paidBy": [
+        {
+          "name": "Ragul",
+          "amount": 160
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 40
+        },
+        {
+          "name": "Sarvajith",
+          "amount": 40
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 40
+        },
+        {
+          "name": "Ragul",
+          "amount": 40
+        }
+      ],
+      "splitMode": "equal"
     }
   ]
 }

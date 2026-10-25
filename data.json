@@ -610,6 +610,34 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "t32vpp1",
+      "ts": 1792917907225,
+      "description": "Juice and Snacks",
+      "amount": 395,
+      "category": "Snacks and Drinks",
+      "paidBy": [
+        {
+          "name": "Ragul",
+          "amount": 395
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 50
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 70
+        },
+        {
+          "name": "Ragul",
+          "amount": 275
+        }
+      ],
+      "splitMode": "custom"
     }
   ]
 }

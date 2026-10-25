@@ -462,6 +462,34 @@
         }
       ],
       "splitMode": "equal"
+    },
+    {
+      "id": "6eqah5d",
+      "ts": 1792905865356,
+      "description": "Auto Fair",
+      "amount": 150,
+      "category": "Travel",
+      "paidBy": [
+        {
+          "name": "Aravindh",
+          "amount": 150
+        }
+      ],
+      "splits": [
+        {
+          "name": "Aravindh",
+          "amount": 50
+        },
+        {
+          "name": "Yuvaraj",
+          "amount": 50
+        },
+        {
+          "name": "Ragul",
+          "amount": 50
+        }
+      ],
+      "splitMode": "equal"
     }
   ]
 }
